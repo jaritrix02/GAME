@@ -1,0 +1,31 @@
+{
+  "name": "gaurav",
+  "version": "1.0.0",
+  "main": "script.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev":   "node server.js",
+    "test":  "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GAURAVKUMAR20740W/gaurav.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/GAURAVKUMAR20740W/gaurav/issues"
+  },
+  "homepage": "https://github.com/GAURAVKUMAR20740W/gaurav#readme",
+  "description": "",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
+    "express-static": "^1.2.6",
+    "jsonwebtoken": "^9.0.3",
+    "mongodb": "^6.16.0"
+  }
+}
