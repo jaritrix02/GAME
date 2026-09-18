@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RPSPro — Login / Sign Up</title>
+  <meta name="description" content="Login or Sign Up to RPSPro to save your Rock Paper Scissors game history." />
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="auth.css" />
+</head>
+<body>
+
+  <!-- ====== BACKGROUND PARTICLES ====== -->
+  <div class="bg-particles" aria-hidden="true">
+    <span></span><span></span><span></span><span></span>
+    <span></span><span></span><span></span><span></span>
+  </div>
+
+  <!-- ====== MAIN AUTH CARD ====== -->
+  <div class="auth-page-wrapper">
+
+    <!-- LEFT: Branding Panel -->
+    <div class="auth-branding">
+      <div class="brand-content">
+        <div class="brand-logo">
+          <img src="src/logo.png" alt="RPSPro Logo" />
+        </div>
+        <h1 class="brand-title">RPS<span>Pro</span></h1>
+        <p class="brand-tagline">Challenge the Computer.<br/>Track Your Legend.</p>
+
+        <div class="brand-features">
+          <div class="feature-item">
+            <i class="fa-solid fa-trophy"></i>
+            <span>Track all your game wins</span>
+          </div>
+          <div class="feature-item">
+            <i class="fa-solid fa-clock-rotate-left"></i>
+            <span>Full game history saved</span>
+          </div>
+          <div class="feature-item">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Secure & encrypted</span>
+          </div>
+          <div class="feature-item">
+            <i class="fa-solid fa-bolt"></i>
+            <span>Instant play, anytime</span>
+          </div>
+        </div>
+
+        <div class="brand-game-icons">
+          <span class="float-icon icon-rock" style="display:flex;align-items:center;justify-content:center;font-size:2rem;">✊</span>
+          <span class="float-icon icon-paper" style="display:flex;align-items:center;justify-content:center;font-size:2rem;">✋</span>
+          <span class="float-icon icon-scissor" style="display:flex;align-items:center;justify-content:center;font-size:2rem;">✌️</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: Form Panel -->
+    <div class="auth-form-panel">
+
+      <!-- Tab Switcher -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tab-login"   onclick="switchTab('login')">
+          <i class="fa-solid fa-right-to-bracket"></i> Login
+        </button>
+        <button class="auth-tab" id="tab-signup" onclick="switchTab('signup')">
+          <i class="fa-solid fa-user-plus"></i> Sign Up
+        </button>
+      </div>
+
+      <!-- ── LOGIN FORM ── -->
+      <form class="auth-form" id="login-form" autocomplete="off">
+        <div class="form-header">
+          <h2><i class="fa-solid fa-gamepad"></i> Welcome Back!</h2>
+          <p>Login to access your game history</p>
+        </div>
+
+        <div class="input-group">
+          <label for="login-emailOrUsername">
+            <i class="fa-solid fa-user"></i> Username or Email
+          </label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-at input-icon"></i>
+            <input
+              type="text"
+              id="login-emailOrUsername"
+              placeholder="Enter your username or email"
+              autocomplete="username"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="login-password">
+            <i class="fa-solid fa-lock"></i> Password
+          </label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-key input-icon"></i>
+            <input
+              type="password"
+              id="login-password"
+              placeholder="Enter your password"
+              autocomplete="current-password"
+              required
+            />
+            <button type="button" class="eye-btn" onclick="togglePassword('login-password', this)">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Error / Success Message -->
+        <div class="form-message" id="login-msg" style="display:none;"></div>
+
+        <button type="submit" class="submit-btn" id="login-btn">
+          <i class="fa-solid fa-right-to-bracket"></i>
+          <span>Login</span>
+          <i class="fa-solid fa-spinner fa-spin btn-spinner" style="display:none;"></i>
+        </button>
+
+        <p class="form-switch-text">
+          New to RPSPro?
+          <a href="#" onclick="switchTab('signup'); return false;">
+            Create an account <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </p>
+
+        <div class="divider"><span>or</span></div>
+
+        <a href="index.html" class="guest-btn">
+          <i class="fa-solid fa-ghost"></i> Continue as Guest
+        </a>
+      </form>
+
+      <!-- ── SIGNUP FORM ── -->
+      <form class="auth-form hidden" id="signup-form" autocomplete="off">
+        <div class="form-header">
+          <h2><i class="fa-solid fa-rocket"></i> Join RPSPro!</h2>
+          <p>Create your account — it's free!</p>
+        </div>
+
+        <div class="input-row">
+          <div class="input-group">
+            <label for="signup-name">
+              <i class="fa-solid fa-id-card"></i> Full Name
+            </label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-user input-icon"></i>
+              <input
+                type="text"
+                id="signup-name"
+                placeholder="Your full name"
+                maxlength="40"
+                required
+              />
+            </div>
+          </div>
+
+          <div class="input-group">
+            <label for="signup-username">
+              <i class="fa-solid fa-at"></i> Username
+            </label>
+            <div class="input-wrap">
+              <i class="fa-solid fa-hashtag input-icon"></i>
+              <input
+                type="text"
+                id="signup-username"
+                placeholder="Choose a username"
+                maxlength="20"
+                required
+              />
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="signup-email">
+            <i class="fa-solid fa-envelope"></i> Email Address
+          </label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-envelope input-icon"></i>
+            <input
+              type="email"
+              id="signup-email"
+              placeholder="your@email.com"
+              autocomplete="email"
+              required
+            />
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="signup-password">
+            <i class="fa-solid fa-lock"></i> Password
+          </label>
+          <div class="input-wrap">
+            <i class="fa-solid fa-key input-icon"></i>
+            <input
+              type="password"
+              id="signup-password"
+              placeholder="Min. 6 characters"
+              autocomplete="new-password"
+              minlength="6"
+              required
+            />
+            <button type="button" class="eye-btn" onclick="togglePassword('signup-password', this)">
+              <i class="fa-solid fa-eye"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- Password Strength Bar -->
+        <div class="strength-bar-wrap">
+          <div class="strength-bar" id="strength-bar"></div>
+          <span class="strength-label" id="strength-label"></span>
+        </div>
+
+        <!-- Error / Success Message -->
+        <div class="form-message" id="signup-msg" style="display:none;"></div>
+
+        <button type="submit" class="submit-btn" id="signup-btn">
+          <i class="fa-solid fa-user-plus"></i>
+          <span>Create Account</span>
+          <i class="fa-solid fa-spinner fa-spin btn-spinner" style="display:none;"></i>
+        </button>
+
+        <p class="form-switch-text">
+          Already have an account?
+          <a href="#" onclick="switchTab('login'); return false;">
+            Login here <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </p>
+
+        <div class="divider"><span>or</span></div>
+
+        <a href="index.html" class="guest-btn">
+          <i class="fa-solid fa-ghost"></i> Continue as Guest
+        </a>
+      </form>
+
+    </div>
+  </div>
+
+  <script src="auth.js"></script>
+</body>
+</html>

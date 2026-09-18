@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>RPSPro — Rock Paper Scissors Game</title>
+    <meta name="description" content="Play the futuristic Rock Paper Scissors game! Choose Rock, Paper, or Scissors and challenge the computer in a best-of-5 battle." />
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css?v=3.2" />
+  </head>
+  <body>
+
+    <!-- ===== NAVBAR ===== -->
+    <header class="header">
+      <nav id="navbar" class="navbar">
+
+        <!-- Logo -->
+        <div class="logo">
+          <img src="src/logo.png" alt="Logo" />
+          <span class="logo-text">RPS<span class="logo-accent">Pro</span></span>
+        </div>
+
+        <!-- Hamburger (mobile) -->
+        <button class="hamburger" id="hamburger-btn" aria-label="Toggle menu">
+          <span></span><span></span><span></span>
+        </button>
+
+        <!-- Nav Links -->
+        <div class="nav-links" id="nav-links">
+          <a href="#" class="nav-link active" id="nav-home">
+            <i class="fa-solid fa-house"></i> Home
+          </a>
+          <a href="#game-section" class="nav-link" id="nav-game">
+            <i class="fa-solid fa-gamepad"></i> Game
+          </a>
+          <a href="#game-rule-section" class="nav-link" id="nav-rules">
+            <i class="fa-solid fa-scroll"></i> Rules
+          </a>
+          <a href="#contact-section" class="nav-link" id="nav-contact">
+            <i class="fa-solid fa-envelope"></i> Contact
+          </a>
+          <!-- History: only visible when logged in -->
+          <a href="#" class="nav-link nav-history hidden" id="nav-history">
+            <i class="fa-solid fa-clock-rotate-left"></i> History
+          </a>
+          <!-- Leaderboard: always visible -->
+          <a href="#" class="nav-link nav-leaderboard" id="nav-leaderboard">
+            <i class="fa-solid fa-trophy"></i> Leaderboard
+          </a>
+        </div>
+
+        <!-- Auth Buttons -->
+        <div class="nav-auth" id="nav-auth">
+          <span class="welcome-msg hidden" id="welcome-msg">
+            <i class="fa-solid fa-circle-user"></i> Hi, <b id="username-display">Player</b>
+          </span>
+          <button class="btn-login"  id="btn-login">
+            <i class="fa-solid fa-right-to-bracket"></i> Login
+          </button>
+          <button class="btn-signup" id="btn-signup">
+            <i class="fa-solid fa-user-plus"></i> Sign Up
+          </button>
+          <button class="btn-logout hidden" id="btn-logout">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+          </button>
+        </div>
+
+      </nav>
+    </header>
+    <!-- ===== GAME SECTION ===== -->
+    <div class="game-section" id="game-section">
+
+      <!-- Battle Mode Selector -->
+      <div class="game-mode-bar">
+        <button class="mode-tab active" id="tab-mode-ai">
+          <i class="fa-solid fa-robot"></i> VS COMPUTER
+        </button>
+        <button class="mode-tab" id="tab-mode-online">
+          <i class="fa-solid fa-earth-americas"></i> ONLINE MULTIPLAYER (1v1)
+          <span class="mode-badge-live">LIVE</span>
+        </button>
+      </div>
+      <!-- ===== HERO TITLE ===== -->
+    <div class="hero-content">
+      <h1 class="hero-title">ROCK <span class="neon-vs">VS</span> PAPER <span class="neon-vs">VS</span> SCISSORS</h1>
+    </div>
+      <!-- Online Lobby Deck (visible when Online mode is selected) -->
+      <div class="online-lobby-bar hidden" id="online-lobby-bar">
+        <div class="lobby-actions">
+          <button class="lobby-btn btn-quick-match" id="btn-quick-match">
+            <i class="fa-solid fa-bolt"></i> Quick Match
+          </button>
+          <button class="lobby-btn btn-create-room" id="btn-create-room">
+            <i class="fa-solid fa-plus"></i> Create Room
+          </button>
+          <div class="lobby-join-box">
+            <input type="text" id="join-room-input" placeholder="Room Code (e.g. ROOM-1234)" maxlength="12" />
+            <button class="lobby-btn btn-join-room" id="btn-join-room">
+              <i class="fa-solid fa-right-to-bracket"></i> Join
+            </button>
+          </div>
+        </div>
+        <div class="lobby-status-line" id="lobby-status-line">
+          <span class="lobby-status-text" id="lobby-status-text">Select Quick Match or enter Room Code to battle online.</span>
+          <button class="btn-leave-room hidden" id="btn-leave-room">
+            <i class="fa-solid fa-door-open"></i> Leave Room
+          </button>
+        </div>
+      </div>
+      <main class="arena-center">
+        <div class="clash-stage" id="clash-stage">
+
+          <div class="clash-stage-topbar" id="clash-stage-topbar">
+
+            <div class="clash-topbar-scores">
+
+              <div class="clash-score-tile player-tile">
+                <div class="tile-meta-header">
+                  <span class="combatant-title" id="player-name-tag">YOU (PLAYER)</span>
+                </div>
+                <div class="clash-score-display">
+                  <span class="clash-score-value" id="user-score">0</span>
+                </div>
+              </div>
+
+              <!-- Center: ONLY Round & Quick In-Place Reset Button -->
+              <div class="clash-round-center" id="clash-round-center">
+                <span class="round-badge"><i class="fa-solid fa-circle-dot"></i> ROUND <span id="round-display">1</span></span>
+                <button class="clash-quick-reset-btn" id="reset-btn" title="Reset Match (Keep on same page)">
+                  <i class="fa-solid fa-rotate-right"></i>
+                </button>
+              </div>
+
+              <!-- Opponent Score Tile -->
+              <div class="clash-score-tile opponent-tile">
+                <div class="clash-score-display">
+                  <span class="clash-score-value" id="computer-score">0</span>
+                </div>
+                <div class="tile-meta-header">
+                  <span class="combatant-title" id="opponent-name-tag">CPU BOT</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Integrated Weapon Selector (Responsive with Small Text) -->
+            <div class="top-weapon-selector" id="top-weapon-selector">
+              <div class="weapon-btn-group">
+                <button class="choice-card choice-btn choice-btn-rock" id="choice-rock" data-choice="0" title="Rock">
+                  <span class="btn-icon">✊</span>
+                  <span class="btn-text">ROCK</span>
+                </button>
+                <button class="choice-card choice-btn choice-btn-paper" id="choice-paper" data-choice="1" title="Paper">
+                  <span class="btn-icon">✋</span>
+                  <span class="btn-text">PAPER</span>
+                </button>
+                <button class="choice-card choice-btn choice-btn-scissor" id="choice-scissor" data-choice="2" title="Scissors">
+                  <span class="btn-icon">✌️</span>
+                  <span class="btn-text">SCISSORS</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Battle Hands Confrontation Row -->
+          <div class="clash-battle-row">
+            <!-- Left Combatant: Player (Human Hand) -->
+            <div class="combatant-box combatant-player" id="player-combatant">
+              <div class="hand-frame" id="player-hand-frame">
+                <span class="corner-bracket corner-tl"></span>
+                <span class="corner-bracket corner-tr"></span>
+                <span class="corner-bracket corner-bl"></span>
+                <span class="corner-bracket corner-br"></span>
+                <img id="player-hand-img" src="src/hands/human-rock.jpg" alt="Player Hand" class="hand-img" />
+                <div class="hand-scan-line"></div>
+              </div>
+              <div class="combatant-gesture-badge" id="player-gesture-badge">
+                <span class="gesture-icon">✊</span> <span class="gesture-text">READY</span>
+              </div>
+            </div>
+
+            <!-- Center Clash VS Deck -->
+            <div class="clash-center-deck" id="clash-center-deck">
+              <div class="clash-vs-orb" id="clash-vs-orb">VS</div>
+              <div class="clash-status-bubble" id="clash-status-bubble">
+                <i class="fa-solid fa-crosshairs"></i> PICK WEAPON
+              </div>
+            </div>
+
+            <!-- Right Combatant: Robot Hand in VS Computer, Human Hand in Matching -->
+            <div class="combatant-box combatant-opponent" id="opponent-combatant">
+              <div class="hand-frame" id="opponent-hand-frame">
+                <span class="corner-bracket corner-tl"></span>
+                <span class="corner-bracket corner-tr"></span>
+                <span class="corner-bracket corner-bl"></span>
+                <span class="corner-bracket corner-br"></span>
+                <img id="opponent-hand-img" src="src/hands/robot-rock.jpg" alt="Opponent Hand" class="hand-img" />
+                <div class="hand-scan-line"></div>
+              </div>
+              <div class="combatant-gesture-badge" id="opponent-gesture-badge">
+                <span class="gesture-icon">🦾</span> <span class="gesture-text">READY</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </main>
+
+
+
+    </div>
+
+    <!-- ===== GAME OVER MODAL ===== -->
+    <div id="gameover-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-box gameover-box">
+        <div id="gameover-blast"></div>
+        <div class="gameover-icon" id="gameover-icon">🏆</div>
+        <h2 id="gameover-title" class="gameover-title">GAME OVER</h2>
+        <div class="gameover-score-row">
+          <div class="go-score-tile go-player">
+            <span class="go-score-label" id="go-player-label">YOU</span>
+            <span class="go-score-num" id="go-player-score">0</span>
+          </div>
+          <span class="go-score-vs">:</span>
+          <div class="go-score-tile go-cpu">
+            <span class="go-score-label" id="go-cpu-label">CPU</span>
+            <span class="go-score-num" id="go-cpu-score">0</span>
+          </div>
+        </div>
+        <p class="gameover-sub" id="gameover-sub">Best of 5 completed!</p>
+        <button id="gameover-play-again" class="modal-btn" style="margin-top:18px;">
+          <i class="fa-solid fa-rotate-right"></i> Play Again
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== RESULT MODAL (kept for legacy) ===== -->
+    <div id="result-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-box">
+        <div id="blast-effect"></div>
+        <h2 id="result-title">Result</h2>
+        <div id="result-message"></div>
+        <button id="next-round-btn" class="modal-btn">
+          <i class="fa-solid fa-arrow-right"></i> Next Round
+        </button>
+      </div>
+    </div>
+
+    <!-- ===== HISTORY MODAL ===== -->
+    <div id="history-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-box history-box">
+        <h2><i class="fa-solid fa-clock-rotate-left"></i> Game History</h2>
+        <div id="history-list" class="history-list"></div>
+        <div class="history-actions">
+          <button class="modal-btn" id="history-close-btn">
+            <i class="fa-solid fa-xmark"></i> Close
+          </button>
+          <button class="modal-btn modal-btn-danger" id="history-clear-btn">
+            <i class="fa-solid fa-trash"></i> Clear History
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== LEADERBOARD MODAL ===== -->
+    <div id="leaderboard-modal" class="modal-overlay" style="display:none;">
+      <div class="modal-box leaderboard-box">
+        <h2><i class="fa-solid fa-trophy"></i> Leaderboard</h2>
+        <p class="lb-subtitle">Top players ranked by most wins</p>
+        <div id="leaderboard-list" class="leaderboard-list"></div>
+        <div class="history-actions">
+          <button class="modal-btn" id="leaderboard-close-btn">
+            <i class="fa-solid fa-xmark"></i> Close
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===== GAME RULES SECTION ===== -->
+    <section class="game-rule-section" id="game-rule-section">
+      
+
+      <div class="rules-card">
+        <div class="rules-header">
+        <span class="rules-badge"><i class="fa-solid fa-scroll"></i> Tactical Matrix</span>
+        <h2 class="rules-title">Battle Combat Rules</h2>
+        <p class="rules-subtitle">Classic Rock Paper Scissors mechanics upgraded for futuristic arena combat.</p>
+      </div>
+        <div class="rules-intro">
+          <div class="rules-intro-icon">
+            <i class="fa-solid fa-crosshairs"></i>
+          </div>
+          <div class="rules-intro-text">
+            <h3>Standard 5-Round Series</h3>
+            <p>Pick your weapon in each round. The combatant with the most round victories takes the championship!</p>
+          </div>
+        </div>
+
+        <div class="rules-grid">
+          <!-- Rock -->
+          <div class="rule-box rule-box-rock">
+            <div class="rule-badge-outcome win">
+              <i class="fa-solid fa-check"></i> Victorious
+            </div>
+            <div class="rule-matchup">
+              <span class="matchup-winner">✊ Rock</span>
+              <span class="matchup-vs">crushes</span>
+              <span class="matchup-loser">✌️ Scissors</span>
+            </div>
+            <p class="matchup-desc">Rock bludgeons and shatters scissors with concentrated blunt kinetic force.</p>
+          </div>
+
+          <!-- Scissors -->
+          <div class="rule-box rule-box-scissors">
+            <div class="rule-badge-outcome win">
+              <i class="fa-solid fa-check"></i> Victorious
+            </div>
+            <div class="rule-matchup">
+              <span class="matchup-winner">✌️ Scissors</span>
+              <span class="matchup-vs">cuts</span>
+              <span class="matchup-loser">✋ Paper</span>
+            </div>
+            <p class="matchup-desc">Precision cutting blades slice cleanly through paper defenses.</p>
+          </div>
+
+          <!-- Paper -->
+          <div class="rule-box rule-box-paper">
+            <div class="rule-badge-outcome win">
+              <i class="fa-solid fa-check"></i> Victorious
+            </div>
+            <div class="rule-matchup">
+              <span class="matchup-winner">✋ Paper</span>
+              <span class="matchup-vs">covers</span>
+              <span class="matchup-loser">✊ Rock</span>
+            </div>
+            <p class="matchup-desc">Flexible surface wraps and neutralizes the kinetic impact of solid rock.</p>
+          </div>
+
+          <!-- Draw -->
+          <div class="rule-box rule-box-draw">
+            <div class="rule-badge-outcome draw">
+              <i class="fa-solid fa-handshake"></i> Stalemate
+            </div>
+            <div class="rule-matchup">
+              <span class="matchup-winner">Equal</span>
+              <span class="matchup-vs">versus</span>
+              <span class="matchup-loser">Equal</span>
+            </div>
+            <p class="matchup-desc">Selecting identical weapons results in a standoff clash. No points awarded.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== CONTACT DEVELOPER SECTION ===== -->
+    <section class="contact-section" id="contact-section">
+      <div class="contact-container">
+        <div class="developer-card dev-card-compact">
+          <div class="contact-header">
+          <span class="contact-badge">
+            <i class="fa-solid fa-code"></i> Developer Profile
+          </span>
+          <h2 class="contact-title">Connect With <span class="contact-accent">Gaurav Kumar</span></h2>
+          <p class="contact-subtitle">
+            Full-Stack Web Developer &bull; Backend Developer &bull; MERN Stack Developer
+          </p>
+        </div>
+          <div class="dev-banner-compact">
+            <div class="dev-avatar">
+              <span class="avatar-text">GK</span>
+              <div class="avatar-status" title="Available"></div>
+            </div>
+            <div class="dev-info-compact">
+              <div class="dev-info-header">
+                <h3 class="dev-name">GAURAV KUMAR</h3>
+                <span class="dev-badge"><i class="fa-solid fa-circle-check"></i> Verified</span>
+              </div>
+              <p class="dev-role">
+                <i class="fa-solid fa-code"></i> Full-Stack Web Developer &bull; MERN Stack
+              </p>
+              <div class="dev-skills-compact">
+                <span class="skill-mini">React.js</span>
+                <span class="skill-mini">Node.js</span>
+                <span class="skill-mini">Express</span>
+                <span class="skill-mini">MongoDB</span>
+                <span class="skill-mini">JavaScript ES6+</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Connect Link Buttons Row -->
+          <div class="dev-links-row">
+            <div class="dev-link-mail-box">
+              <a href="mailto:gk5376604@gmail.com" class="dev-link-pill" title="Send Email">
+                <i class="fa-solid fa-envelope"></i>
+                <span id="email-link">gk5376604@gmail.com</span>
+              </a>
+              <button class="dev-copy-pill" id="copy-email-btn" title="Copy Email">
+                <i class="fa-solid fa-copy"></i>
+              </button>
+            </div>
+            <a href="https://linkedin.com/in/gaurav-kumar-20740w" target="_blank" rel="noopener noreferrer" class="dev-link-pill pill-linkedin" title="LinkedIn Profile">
+              <i class="fa-brands fa-linkedin-in"></i>
+              <span>LinkedIn</span>
+            </a>
+            <a href="https://jaritrix02.github.io/Portfolio/" target="_blank" rel="noopener noreferrer" class="dev-link-pill pill-portfolio" title="Portfolio Showcase">
+              <i class="fa-solid fa-globe"></i>
+              <span>Portfolio</span>
+            </a>
+            <a href="https://github.com/jaritrix" target="_blank" rel="noopener noreferrer" class="dev-link-pill pill-github" title="GitHub Profile">
+              <i class="fa-brands fa-github"></i>
+              <span>GitHub</span>
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Footer Bar -->
+      <footer class="app-footer">
+        <div class="footer-content">
+          <p class="footer-copy">
+            &copy; 2026 <strong>RPSPro</strong> &bull; Developed with <i class="fa-solid fa-heart" style="color: #ff3366;"></i> by <a href="https://jaritrix02.github.io/Portfolio/" target="_blank" rel="noopener noreferrer" class="footer-author">Gaurav Kumar</a>
+          </p>
+          <div class="footer-socials">
+            <a href="mailto:gk5376604@gmail.com" title="Email: gk5376604@gmail.com" class="footer-icon-btn"><i class="fa-solid fa-envelope"></i></a>
+            <a href="https://linkedin.com/in/gaurav-kumar-20740w" target="_blank" rel="noopener noreferrer" title="LinkedIn Profile" class="footer-icon-btn"><i class="fa-brands fa-linkedin-in"></i></a>
+            <a href="https://jaritrix02.github.io/Portfolio/" target="_blank" rel="noopener noreferrer" title="Portfolio Website" class="footer-icon-btn"><i class="fa-solid fa-globe"></i></a>
+            <a href="https://github.com/jaritrix" target="_blank" rel="noopener noreferrer" title="GitHub Profile" class="footer-icon-btn"><i class="fa-brands fa-github"></i></a>
+          </div>
+        </div>
+      </footer>
+    </section>
+
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="script.js?v=3.2"></script>
+  </body>
+</html>
